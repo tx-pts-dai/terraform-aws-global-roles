@@ -1,12 +1,12 @@
 variable "dai_lens_data_crawler" {
   description = <<-EOT
-Configuration for the DAI Lens data crawler IAM role and permissions"
+    Configuration for the DAI Lens data crawler IAM role and permissions"
 
-- create              : Whether to create the IAM role and policies.
-- block_rds_access    : If true, blocks access to RDS resources.
-- block_health_access : If true, blocks access to AWS Health resources.
-- trusted_role_arns   : List of ARNs for roles that can assume this role.
-EOT
+    - create              : Whether to create the IAM role and policies.
+    - block_rds_access    : If true, blocks access to RDS resources.
+    - block_health_access : If true, blocks access to AWS Health resources.
+    - trusted_role_arns   : List of ARNs for roles that can assume this role.
+  EOT
 
   type = object({
     create              = optional(bool, false)
