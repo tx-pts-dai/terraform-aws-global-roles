@@ -11,31 +11,42 @@ terraform {
 
 #
 ## DAI Lens Data Crawler
+data "aws_iam_policy_document" "dai_lens_data_crawler_assume_role_policy" {
+  count = var.dai_lens_data_crawler.create ? 1 : 0
+
+  dynamic "statement" {
+    for_each = [""]
+
+    content {
+      effect  = "Allow"
+      actions = ["sts:AssumeRole"]
+      principals {
+        type        = "Service"
+        identifiers = ["ec2.amazonaws.com"]
+      }
+    }
+  }
+
+  dynamic "statement" {
+    for_each = var.dai_lens_data_crawler.trusted_role_arns
+
+    content {
+      effect  = "Allow"
+      actions = ["sts:AssumeRole"]
+      principals {
+        type        = "AWS"
+        identifiers = [statement.value]
+      }
+    }
+  }
+}
 resource "aws_iam_role" "dai_data_crawler" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
   name        = "dai-lens-data-crawler"
   description = "Grants access to DAI Lens in RDS and AWS Health"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      },
-      {
-        Effect = "Allow",
-        Principal = {
-          AWS = "arn:aws:iam::730335665754:role/dai-lens" # DAI Prod AWS Account
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
+  assume_role_policy = data.aws_iam_policy_document.dai_lens_data_crawler_assume_role_policy[0].json
 }
 ## Policy for RDS read-only + AWS Health read
 data "aws_iam_policy_document" "dai_data_crawler_policy" {

@@ -1,40 +1,20 @@
-# < This section can be removed >
+# My Global Roles
 
-Official doc for public modules [hashicorp](https://developer.hashicorp.com/terraform/registry/modules/publish)
-
-Repo structure:
-
-```
-├── README.md
-├── main.tf
-├── variables.tf
-├── outputs.tf
-├── ...
-├── modules/
-│   ├── nestedA/
-│   │   ├── README.md
-│   │   ├── variables.tf
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   ├── nestedB/
-│   ├── .../
-├── examples/
-│   ├── exampleA/
-│   │   ├── main.tf
-│   ├── exampleB/
-│   ├── .../
-```
-
-# My Terraform Module
-
-< module description >
+This module provides some global IAM Roles and Policies to be used across single or multiple AWS Accounts.
 
 ## Usage
 
-< describe the module minimal code required for a deployment >
+```tf
+module "global_roles" {
+  source  = "tx-pts-dai/global-roles/aws
+  version = "1.0.0
 
-```hcl
-module "my_module_example" {
+  dai_lens_data_crawler = {
+    create = true
+    trusted_role_arns = [
+      "arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_NAME>"
+    ]
+  }
 }
 ```
 
@@ -93,6 +73,7 @@ No modules.
 | [aws_iam_role.dai_data_crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.attach_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_policy_document.dai_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.dai_lens_data_crawler_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
