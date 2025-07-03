@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "dai_data_crawler_policy" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
   dynamic "statement" {
-    for_each = var.dai_lens_data_crawler.block_rds_access ? [] : [""]
+    for_each = var.dai_lens_data_crawler.disable_rds_access ? [] : [""]
 
     content {
       effect = "Allow"
@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "dai_data_crawler_policy" {
     }
   }
   dynamic "statement" {
-    for_each = var.dai_lens_data_crawler.block_health_access ? [] : [""]
+    for_each = var.dai_lens_data_crawler.disable_health_access ? [] : [""]
 
     content {
       effect = "Allow"
