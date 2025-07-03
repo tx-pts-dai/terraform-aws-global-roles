@@ -52,14 +52,14 @@ as described in the `.pre-commit-config.yaml` file
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0 |
 
 ## Modules
 
@@ -79,7 +79,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_dai_lens_data_crawler"></a> [dai\_lens\_data\_crawler](#input\_dai\_lens\_data\_crawler) | Configuration for the DAI Lens data crawler IAM role and permissions"<br/><br/>- create                : Whether to create the IAM role and policies.<br/>- nameprefix            : Prefix for the IAM role name and policy.<br/>- disable\_rds\_access    : If true, disables access to RDS resources.<br/>- disable\_health\_access : If true, disables access to AWS Health resources.<br/>- trusted\_role\_arns     : List of ARNs for roles that can assume this role. | <pre>object({<br/>    create                = optional(bool, false)<br/>    nameprefix            = optional(string, "")<br/>    disable_rds_access    = optional(bool, true)<br/>    disable_health_access = optional(bool, true)<br/>    trusted_role_arns     = optional(list(string), [])<br/>  })</pre> | <pre>{<br/>  "create": false,<br/>  "disable_health_access": true,<br/>  "disable_rds_access": true,<br/>  "nameprefix": "",<br/>  "trusted_role_arns": []<br/>}</pre> | no |
+| <a name="input_dai_lens_data_crawler"></a> [dai\_lens\_data\_crawler](#input\_dai\_lens\_data\_crawler) | Configuration for the DAI Lens data crawler IAM role and permissions"<br/><br/>- create                : Whether to create the IAM role and policies.<br/>- nameprefix            : Prefix for the IAM role name and policy.<br/>- disable\_rds\_access    : If true, disables access to RDS resources.<br/>- disable\_health\_access : If true, disables access to AWS Health resources.<br/>- trusted\_role\_arns     : List of ARNs for roles that can assume this role. | <pre>object({<br/>    create                = optional(bool, false)<br/>    nameprefix            = optional(string, "")<br/>    disable_rds_access    = optional(bool, false)<br/>    disable_health_access = optional(bool, false)<br/>    trusted_role_arns     = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 
 ## Outputs
 
