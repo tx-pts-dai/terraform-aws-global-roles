@@ -1,14 +1,3 @@
-## Providers
-terraform {
-  required_version = ">= 1.3.0"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 4.0"
-    }
-  }
-}
-
 #
 ## DAI Lens Data Crawler
 data "aws_iam_policy_document" "dai_lens_data_crawler_assume_role_policy" {

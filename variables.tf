@@ -12,15 +12,9 @@ variable "dai_lens_data_crawler" {
   type = object({
     create                = optional(bool, false)
     nameprefix            = optional(string, "")
-    disable_rds_access    = optional(bool, true)
-    disable_health_access = optional(bool, true)
+    disable_rds_access    = optional(bool, false)
+    disable_health_access = optional(bool, false)
     trusted_role_arns     = optional(list(string), [])
   })
-  default = {
-    create                = false
-    nameprefix            = ""
-    disable_rds_access    = true
-    disable_health_access = true
-    trusted_role_arns     = []
-  }
+  default = {}
 }
