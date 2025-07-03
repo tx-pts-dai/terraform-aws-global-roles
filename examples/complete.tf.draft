@@ -3,10 +3,10 @@ module "global_roles" {
   version = "1.0.0
 
   dai_lens_data_crawler = {
-    create              = true
-    block_rds_access    = false
-    block_health_access = false
-    trusted_role_arns   = [
+    create                = true
+    disable_rds_access    = false
+    disable_health_access = false
+    trusted_role_arns     = [
       "arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_NAME>"
     ]
   }
