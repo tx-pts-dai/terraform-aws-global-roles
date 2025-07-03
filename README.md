@@ -77,7 +77,9 @@ as described in the `.pre-commit-config.yaml` file
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0 |
 
 ## Modules
 
@@ -85,15 +87,24 @@ No modules.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [aws_iam_policy.dai_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_role.dai_data_crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.attach_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_policy_document.dai_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_dai_lens_data_crawler"></a> [dai\_lens\_data\_crawler](#input\_dai\_lens\_data\_crawler) | Configuration for the DAI Lens data crawler IAM role and permissions"<br/><br/>    - `create`              : Whether to create the IAM role and policies.<br/>    - `block_rds_access`    : If true, blocks access to RDS resources.<br/>    - `block_health_access` : If true, blocks access to AWS Health resources.<br/>    - `trusted_role_arns`   : List of ARNs for roles that can assume this role. | <pre>object({<br/>    create              = optional(bool, false)<br/>    block_rds_access    = optional(bool, true)<br/>    block_health_access = optional(bool, true)<br/>    trusted_role_arns   = optional(list(string), [])<br/>  })</pre> | <pre>{<br/>  "block_health_access": true,<br/>  "block_rds_access": true,<br/>  "create": false,<br/>  "trusted_role_arns": []<br/>}</pre> | no |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_dai_data_crawler"></a> [dai\_data\_crawler](#output\_dai\_data\_crawler) | values for the DAI Lens data crawler IAM role |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Authors
