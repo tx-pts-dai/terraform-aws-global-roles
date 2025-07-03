@@ -4,6 +4,7 @@ module "global_roles" {
 
   dai_lens_data_crawler = {
     create                = true
+    nameprefix            = ""
     disable_rds_access    = false
     disable_health_access = false
     trusted_role_arns     = [

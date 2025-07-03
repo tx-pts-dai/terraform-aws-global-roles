@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "dai_lens_data_crawler_assume_role_policy" {
 resource "aws_iam_role" "dai_data_crawler" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
-  name        = "dai-lens-data-crawler"
+  name        = "${var.dai_lens_data_crawler.nameprefix}dai-lens-data-crawler"
   description = "Grants access to DAI Lens in RDS and AWS Health"
 
   assume_role_policy = data.aws_iam_policy_document.dai_lens_data_crawler_assume_role_policy[0].json
@@ -81,7 +81,7 @@ data "aws_iam_policy_document" "dai_data_crawler_policy" {
 resource "aws_iam_policy" "dai_data_crawler_policy" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
-  name        = "dai-data-crawler-policy"
+  name        = "${var.dai_lens_data_crawler.nameprefix}dai-lens-data-crawler"
   description = "Read-only access to RDS and AWS Health"
 
   policy = data.aws_iam_policy_document.dai_data_crawler_policy[0].json
