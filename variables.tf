@@ -35,7 +35,7 @@ variable "terraform_execution_role" {
     create                        = optional(bool, true)
     github_actions_oidc_role_name = optional(string, "cicd-iac")
     external_trusted_arns         = optional(list(string), [])
-    policy_arns                   = optional(list(string), [])
+    policy_arns                   = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     permissions_boundary          = optional(string, null)
   })
   default = {}
