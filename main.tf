@@ -1,4 +1,79 @@
 #
+## Backup Monitor Crawler
+data "aws_iam_policy_document" "backup_monitor_crawler_assume_role_policy" {
+  count = var.backup_monitor_crawler.create ? 1 : 0
+
+  dynamic "statement" {
+    for_each = var.backup_monitor_crawler.trusted_role_arns
+
+    content {
+      effect  = "Allow"
+      actions = ["sts:AssumeRole"]
+      principals {
+        type        = "AWS"
+        identifiers = [statement.value]
+      }
+    }
+  }
+}
+
+resource "aws_iam_role" "backup_monitor_crawler" {
+  count = var.backup_monitor_crawler.create ? 1 : 0
+
+  name        = "${var.backup_monitor_crawler.nameprefix}backup-monitor-crawler"
+  description = "Grants the backup monitor Lambda read access to RDS, Backup, and KMS resources"
+
+  assume_role_policy = data.aws_iam_policy_document.backup_monitor_crawler_assume_role_policy[0].json
+}
+
+data "aws_iam_policy_document" "backup_monitor_crawler_policy" {
+  count = var.backup_monitor_crawler.create ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "rds:DescribeDBInstances",
+      "rds:DescribeDBClusters",
+      "rds:ListTagsForResource",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "backup:ListBackupJobs",
+      "backup:ListCopyJobs",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:DescribeKey",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "backup_monitor_crawler_policy" {
+  count = var.backup_monitor_crawler.create ? 1 : 0
+
+  name        = "${var.backup_monitor_crawler.nameprefix}backup-monitor-crawler"
+  description = "Read-only access to RDS, Backup, and KMS for the backup monitor crawler"
+
+  policy = data.aws_iam_policy_document.backup_monitor_crawler_policy[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "attach_backup_monitor_crawler_policy" {
+  count = var.backup_monitor_crawler.create ? 1 : 0
+
+  role       = aws_iam_role.backup_monitor_crawler[0].name
+  policy_arn = aws_iam_policy.backup_monitor_crawler_policy[0].arn
+}
+
+#
 ## DAI Lens Data Crawler
 data "aws_iam_policy_document" "dai_lens_data_crawler_assume_role_policy" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
