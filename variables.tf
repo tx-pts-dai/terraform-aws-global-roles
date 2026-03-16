@@ -1,3 +1,20 @@
+variable "backup_monitor_crawler" {
+  description = <<-EOT
+    Configuration for the backup monitor crawler IAM role and permissions.
+
+    - create            : Whether to create the IAM role and policies.
+    - nameprefix        : Prefix for the IAM role name and policy.
+    - trusted_role_arns : List of ARNs for roles that can assume this role (e.g. the backup monitor Lambda execution role).
+  EOT
+
+  type = object({
+    create            = optional(bool, false)
+    nameprefix        = optional(string, "")
+    trusted_role_arns = optional(list(string), [])
+  })
+  default = {}
+}
+
 variable "dai_lens_data_crawler" {
   description = <<-EOT
     Configuration for the DAI Lens data crawler IAM role and permissions"

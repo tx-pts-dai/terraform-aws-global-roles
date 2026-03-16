@@ -69,12 +69,17 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [aws_iam_policy.backup_monitor_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.dai_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_role.backup_monitor_crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.dai_data_crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.terraform_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.attach_backup_monitor_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.attach_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.terraform_execution_policies](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.backup_monitor_crawler_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.backup_monitor_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.dai_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.dai_lens_data_crawler_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.terraform_execution_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -83,6 +88,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_backup_monitor_crawler"></a> [backup\_monitor\_crawler](#input\_backup\_monitor\_crawler) | Configuration for the backup monitor crawler IAM role and permissions.<br/><br/>- create            : Whether to create the IAM role and policies.<br/>- nameprefix        : Prefix for the IAM role name and policy.<br/>- trusted\_role\_arns : List of ARNs for roles that can assume this role (e.g. the backup monitor Lambda execution role). | <pre>object({<br/>    create            = optional(bool, false)<br/>    nameprefix        = optional(string, "")<br/>    trusted_role_arns = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 | <a name="input_dai_lens_data_crawler"></a> [dai\_lens\_data\_crawler](#input\_dai\_lens\_data\_crawler) | Configuration for the DAI Lens data crawler IAM role and permissions"<br/><br/>- create                : Whether to create the IAM role and policies.<br/>- nameprefix            : Prefix for the IAM role name and policy.<br/>- disable\_rds\_access    : If true, disables access to RDS resources.<br/>- disable\_health\_access : If true, disables access to AWS Health resources.<br/>- trusted\_role\_arns     : List of ARNs for roles that can assume this role. | <pre>object({<br/>    create                = optional(bool, false)<br/>    nameprefix            = optional(string, "")<br/>    disable_rds_access    = optional(bool, false)<br/>    disable_health_access = optional(bool, false)<br/>    trusted_role_arns     = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 | <a name="input_terraform_execution_role"></a> [terraform\_execution\_role](#input\_terraform\_execution\_role) | Configuration for the Terraform execution IAM role. This role is assumed by<br/>GitHub Actions OIDC roles to run Terraform, separating authentication from authorization.<br/><br/>- create                        : Whether to create the IAM role (default: true).<br/>- github\_actions\_oidc\_role\_name : Name of the GitHub Actions OIDC role in the current account (default: "cicd-iac").<br/>- external\_trusted\_arns         : List of external role ARNs that can assume this role (cross-account access).<br/>- policy\_arns                   : List of managed policy ARNs to attach.<br/>- permissions\_boundary          : ARN of permissions boundary policy (optional). | <pre>object({<br/>    create                        = optional(bool, true)<br/>    github_actions_oidc_role_name = optional(string, "cicd-iac")<br/>    external_trusted_arns         = optional(list(string), [])<br/>    policy_arns                   = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br/>    permissions_boundary          = optional(string, null)<br/>  })</pre> | `{}` | no |
 
@@ -90,6 +96,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_backup_monitor_crawler"></a> [backup\_monitor\_crawler](#output\_backup\_monitor\_crawler) | Values for the backup monitor crawler IAM role |
 | <a name="output_dai_data_crawler"></a> [dai\_data\_crawler](#output\_dai\_data\_crawler) | values for the DAI Lens data crawler IAM role |
 | <a name="output_terraform_execution"></a> [terraform\_execution](#output\_terraform\_execution) | Values for the Terraform execution IAM role |
 <!-- END_TF_DOCS -->
