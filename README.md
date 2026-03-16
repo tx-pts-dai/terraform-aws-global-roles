@@ -6,13 +6,30 @@ This module provides some global IAM Roles and Policies to be used across single
 
 ```tf
 module "global_roles" {
-  source  = "tx-pts-dai/global-roles/aws
-  version = "1.0.0
+  source  = "tx-pts-dai/global-roles/aws"
+  version = "~> 1.0"
 
+  # Terraform Execution Role (enabled by default)
+  terraform_execution_role = {
+    github_actions_oidc_role_name = "cicd-iac"
+    policy_arns = [
+      "arn:aws:iam::aws:policy/AdministratorAccess",
+    ]
+  }
+
+  # Backup Monitor Crawler Role (disabled by default)
+  backup_monitor_crawler = {
+    create = true
+    trusted_role_arns = [
+      "arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_NAME>",
+    ]
+  }
+
+  # DAI Lens Data Crawler Role (disabled by default)
   dai_lens_data_crawler = {
     create = true
     trusted_role_arns = [
-      "arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_NAME>"
+      "arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_NAME>",
     ]
   }
 }
@@ -107,4 +124,4 @@ Module is maintained by [Alfredo Gottardo](https://github.com/AlfGot), [David Be
 
 ## License
 
-Apache 2 Licensed. See [LICENSE](< link to license file >) for full details.
+Apache 2 Licensed. See [LICENSE](LICENSE) for full details.
