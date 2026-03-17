@@ -1,30 +1,78 @@
-# My Global Roles
+# terraform-aws-global-roles
 
-This module provides some global IAM Roles and Policies to be used across single or multiple AWS Accounts.
+This module provisions IAM roles to be deployed across AWS accounts. It supports two patterns:
+
+- **Cross-account roles** — roles that a trusted service (e.g. a Lambda or EKS pod in a hub account) can assume in spoke accounts to read data. Add one entry per tool; no module changes required.
+- **Terraform execution role** — a role assumed by GitHub Actions via OIDC to run Terraform in the account.
 
 ## Usage
 
-```tf
+```hcl
 module "global_roles" {
-  source  = "tx-pts-dai/global-roles/aws
-  version = "1.0.0
+  source  = "tx-pts-dai/global-roles/aws"
+  version = "~> 2.0"
 
-  dai_lens_data_crawler = {
-    create = true
-    trusted_role_arns = [
-      "arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_NAME>"
+  # Cross-account roles — one entry per tool that needs access to this account
+  cross_account_roles = {
+    "dai-lens-data-crawler" = {
+      description       = "Grants DAI Lens read access to RDS and AWS Health"
+      trusted_role_arns = ["arn:aws:iam::<HUB_ACCOUNT_ID>:role/dai-lens"]
+      policy_statements = [
+        { actions = ["rds:Describe*", "rds:List*"] },
+        { actions = ["health:DescribeEvents", "health:DescribeEventDetails", "health:DescribeAffectedEntities"] },
+      ]
+    }
+    "backup-monitor-crawler" = {
+      description       = "Grants shared-backups-monitoring read access to RDS backup jobs"
+      trusted_role_arns = ["arn:aws:iam::<HUB_ACCOUNT_ID>:role/backup-monitor"]
+      policy_statements = [
+        { actions = ["rds:Describe*", "rds:List*", "rds:ListTagsForResource"] },
+        { actions = ["backup:ListBackupJobs", "backup:ListCopyJobs"] },
+        { actions = ["kms:DescribeKey"] },
+      ]
+    }
+  }
+
+  # Terraform execution role (enabled by default, trusts cicd-iac OIDC role)
+  terraform_execution_role = {
+    policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
+  }
+}
+```
+
+## Migration from v1
+
+The `dai_lens_data_crawler` variable has been removed. Migrate to `cross_account_roles`:
+
+```hcl
+# Before (v1)
+dai_lens_data_crawler = {
+  create            = true
+  trusted_role_arns = ["arn:aws:iam::<ID>:role/dai-lens"]
+}
+
+# After (v2)
+cross_account_roles = {
+  "dai-lens-data-crawler" = {
+    trusted_role_arns = ["arn:aws:iam::<ID>:role/dai-lens"]
+    policy_statements = [
+      { actions = ["rds:Describe*", "rds:List*"] },
+      { actions = ["health:DescribeEvents", "health:DescribeEventDetails", "health:DescribeAffectedEntities"] },
     ]
   }
 }
 ```
 
-## Explanation and description of interesting use-cases
-
-< create a h2 chapter for each section explaining special module concepts >
+> **Note:** because the resource addresses changed, run `terraform state mv` to avoid destroying and recreating the existing role:
+> ```
+> terraform state mv 'aws_iam_role.dai_data_crawler[0]' 'aws_iam_role.cross_account["dai-lens-data-crawler"]'
+> terraform state mv 'aws_iam_policy.dai_data_crawler_policy[0]' 'aws_iam_policy.cross_account["dai-lens-data-crawler"]'
+> terraform state mv 'aws_iam_role_policy_attachment.attach_data_crawler_policy[0]' 'aws_iam_role_policy_attachment.cross_account["dai-lens-data-crawler"]'
+> ```
 
 ## Examples
 
-< if the folder `examples/` exists, put here the link to the examples subfolders with their descriptions >
+See [`examples/complete`](./examples/complete) for a full working example with both cross-account roles and the Terraform execution role.
 
 ## Contributing
 
