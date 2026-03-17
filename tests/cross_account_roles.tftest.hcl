@@ -56,14 +56,14 @@ run "creates_multiple_roles" {
   variables {
     cross_account_roles = {
       "dai-lens-data-crawler" = {
-        trusted_role_arns = ["arn:aws:iam::730335665754:role/dai-lens"]
+        trusted_role_arns = ["arn:aws:iam::111111111111:role/dai-lens"]
         policy_statements = [
           { actions = ["rds:Describe*", "rds:List*"] },
           { actions = ["health:DescribeEvents", "health:DescribeEventDetails", "health:DescribeAffectedEntities"] },
         ]
       }
       "backup-monitor-crawler" = {
-        trusted_role_arns = ["arn:aws:iam::730335665754:role/backup-monitor"]
+        trusted_role_arns = ["arn:aws:iam::222222222222:role/backup-monitor"]
         policy_statements = [
           { actions = ["rds:Describe*", "rds:List*", "rds:ListTagsForResource"] },
           { actions = ["backup:ListBackupJobs", "backup:ListCopyJobs"] },
