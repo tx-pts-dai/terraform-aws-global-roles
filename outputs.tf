@@ -1,9 +1,11 @@
-output "dai_data_crawler" {
-  description = "values for the DAI Lens data crawler IAM role"
-  value = var.dai_lens_data_crawler.create ? {
-    role_name = aws_iam_role.dai_data_crawler[0].name
-    role_arn  = aws_iam_role.dai_data_crawler[0].arn
-  } : null
+output "cross_account_roles" {
+  description = "Map of created cross-account IAM roles, keyed by role name"
+  value = {
+    for k, role in aws_iam_role.cross_account : k => {
+      role_name = role.name
+      role_arn  = role.arn
+    }
+  }
 }
 
 output "terraform_execution" {

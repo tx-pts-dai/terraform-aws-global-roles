@@ -1,21 +1,29 @@
-variable "dai_lens_data_crawler" {
+variable "cross_account_roles" {
   description = <<-EOT
-    Configuration for the DAI Lens data crawler IAM role and permissions"
+    Map of cross-account IAM roles to create. Each entry creates a role
+    that trusted principals can assume, with an inline policy built from
+    the provided statements.
 
-    - create                : Whether to create the IAM role and policies.
-    - nameprefix            : Prefix for the IAM role name and policy.
-    - disable_rds_access    : If true, disables access to RDS resources.
-    - disable_health_access : If true, disables access to AWS Health resources.
-    - trusted_role_arns     : List of ARNs for roles that can assume this role.
+    - trusted_role_arns : List of IAM role ARNs allowed to assume this role.
+    - description       : Human-readable description for the role and policy.
+    - policy_statements : List of IAM policy statements to attach.
+      - sid       : Optional statement ID.
+      - effect    : "Allow" or "Deny" (default: "Allow").
+      - actions   : List of IAM actions.
+      - resources : List of resource ARNs (default: ["*"]).
   EOT
 
-  type = object({
-    create                = optional(bool, false)
-    nameprefix            = optional(string, "")
-    disable_rds_access    = optional(bool, false)
-    disable_health_access = optional(bool, false)
-    trusted_role_arns     = optional(list(string), [])
-  })
+  type = map(object({
+    trusted_role_arns = optional(list(string), [])
+    description       = optional(string, "Cross-account IAM role")
+    policy_statements = list(object({
+      sid       = optional(string, null)
+      effect    = optional(string, "Allow")
+      actions   = list(string)
+      resources = optional(list(string), ["*"])
+    }))
+  }))
+
   default = {}
 }
 

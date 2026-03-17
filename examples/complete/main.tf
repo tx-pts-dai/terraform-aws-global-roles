@@ -34,7 +34,6 @@ module "global_roles" {
     # Allow cross-account access from other DAI managed accounts
     external_trusted_arns = [
       # "arn:aws:iam::111111111111:role/terraform-execution",
-      # "arn:aws:iam::222222222222:role/terraform-execution",
     ]
 
     # Attach managed policies
@@ -46,17 +45,42 @@ module "global_roles" {
     # permissions_boundary = "arn:aws:iam::123456789012:policy/TerraformBoundary"
   }
 
-  # DAI Lens Data Crawler Role (disabled by default)
-  dai_lens_data_crawler = {
-    create = true
+  # Cross-account roles — add one entry per tool that needs to crawl this account
+  cross_account_roles = {
+    # DAI Lens data crawler: reads RDS metadata and AWS Health events
+    "dai-lens-data-crawler" = {
+      description       = "Grants DAI Lens read access to RDS and AWS Health"
+      trusted_role_arns = ["arn:aws:iam::730335665754:role/dai-lens"]
+      policy_statements = [
+        {
+          sid     = "RDSReadOnly"
+          actions = ["rds:Describe*", "rds:List*"]
+        },
+        {
+          sid     = "HealthReadOnly"
+          actions = ["health:DescribeEvents", "health:DescribeEventDetails", "health:DescribeAffectedEntities"]
+        },
+      ]
+    }
 
-    # Allow DAI Lens to assume this role
-    trusted_role_arns = [
-      # "arn:aws:iam::123456789012:role/dai-lens-crawler",
-    ]
-
-    # Optionally disable specific permissions
-    # disable_rds_access    = true
-    # disable_health_access = true
+    # Backup monitor crawler: reads RDS backup and copy job status
+    "backup-monitor-crawler" = {
+      description       = "Grants shared-backups-monitoring read access to RDS backup jobs"
+      trusted_role_arns = ["arn:aws:iam::730335665754:role/backup-monitor"]
+      policy_statements = [
+        {
+          sid     = "RDSReadOnly"
+          actions = ["rds:Describe*", "rds:List*", "rds:ListTagsForResource"]
+        },
+        {
+          sid     = "BackupReadOnly"
+          actions = ["backup:ListBackupJobs", "backup:ListCopyJobs"]
+        },
+        {
+          sid     = "KMSDescribe"
+          actions = ["kms:DescribeKey"]
+        },
+      ]
+    }
   }
 }
