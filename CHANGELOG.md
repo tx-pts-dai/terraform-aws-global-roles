@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.2.0...v1.3.0) (2026-03-18)
+
+### Features
+
+* add backup-monitor-crawler IAM role ([#10](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/10)) ([70a2937](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/70a2937211bb64912f7dadcf4fc3cdd8f349e676))
+
 ## [1.2.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.1.0...v1.2.0) (2026-02-06)
 
 ### Features
