@@ -46,6 +46,16 @@ module "global_roles" {
     # permissions_boundary = "arn:aws:iam::123456789012:policy/TerraformBoundary"
   }
 
+  # Backup Monitor Crawler Role (disabled by default)
+  backup_monitor_crawler = {
+    create = true
+
+    # Allow the backup monitor Lambda execution role to assume this role
+    trusted_role_arns = [
+      # "arn:aws:iam::123456789012:role/backup-monitor-lambda-role",
+    ]
+  }
+
   # DAI Lens Data Crawler Role (disabled by default)
   dai_lens_data_crawler = {
     create = true
