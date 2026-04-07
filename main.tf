@@ -34,6 +34,13 @@ data "aws_iam_policy_document" "backup_monitor_crawler_policy" {
     actions = [
       "rds:DescribeDBInstances",
       "rds:DescribeDBClusters",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
       "tag:GetResources",
     ]
     resources = ["*"]
