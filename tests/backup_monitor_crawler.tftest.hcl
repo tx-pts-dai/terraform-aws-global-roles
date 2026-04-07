@@ -24,7 +24,7 @@ mock_provider "aws" {
           "Statement": [
             {
               "Effect": "Allow",
-              "Action": ["rds:DescribeDBInstances", "rds:DescribeDBClusters", "rds:ListTagsForResource"],
+              "Action": ["rds:DescribeDBInstances", "rds:DescribeDBClusters", "tag:GetResources"],
               "Resource": "*"
             },
             {

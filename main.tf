@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "backup_monitor_crawler_policy" {
     actions = [
       "rds:DescribeDBInstances",
       "rds:DescribeDBClusters",
-      "rds:ListTagsForResource",
+      "tag:GetResources",
     ]
     resources = ["*"]
   }
