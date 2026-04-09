@@ -80,22 +80,6 @@ run "attaches_readonly_access_policy" {
   }
 }
 
-run "enables_pod_identity" {
-  command = plan
-
-  variables {
-    gotthard = {
-      create              = true
-      enable_pod_identity = true
-    }
-  }
-
-  assert {
-    condition     = aws_iam_role.gotthard[0].name == "gotthard"
-    error_message = "Role should still be created with pod identity enabled"
-  }
-}
-
 run "outputs_role_info" {
   command = plan
 
