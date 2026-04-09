@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.4.2...v1.5.0) (2026-04-09)
+
+### Features
+
+* **gotthard:** add Gotthard read-only IAM role ([#15](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/15)) ([8754495](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/8754495846f124b7448ba4497101fc7ce5140e4c))
+
 ## [1.4.1](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.4.0...v1.4.1) (2026-04-08)
 
 ### Bug Fixes
