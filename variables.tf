@@ -40,7 +40,7 @@ variable "gotthard" {
   description = <<-EOT
     Configuration for the Gotthard IAM role.
     This role grants broad read-only access for the Gotthard AI agent to detect issues
-    within AWS accounts, plus the ability to read secret values from Secrets Manager.
+    within AWS accounts. Secret values cannot be read as ReadOnlyAccess excludes GetSecretValue.
 
     - create            : Whether to create the IAM role and policies.
     - nameprefix        : Prefix for the IAM role name and policy.

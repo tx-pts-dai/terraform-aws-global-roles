@@ -17,24 +17,6 @@ mock_provider "aws" {
       JSON
     }
   }
-
-  override_data {
-    target = data.aws_iam_policy_document.gotthard_secrets_policy[0]
-    values = {
-      json = <<-JSON
-        {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": ["secretsmanager:GetSecretValue"],
-              "Resource": "*"
-            }
-          ]
-        }
-      JSON
-    }
-  }
 }
 
 variables {
@@ -95,21 +77,6 @@ run "attaches_readonly_access_policy" {
   assert {
     condition     = aws_iam_role_policy_attachment.gotthard_readonly_access[0].policy_arn == "arn:aws:iam::aws:policy/ReadOnlyAccess"
     error_message = "ReadOnlyAccess managed policy should be attached"
-  }
-}
-
-run "creates_secrets_policy" {
-  command = plan
-
-  variables {
-    gotthard = {
-      create = true
-    }
-  }
-
-  assert {
-    condition     = aws_iam_policy.gotthard_secrets_policy[0].name == "gotthard-secrets"
-    error_message = "Secrets policy should be created"
   }
 }
 

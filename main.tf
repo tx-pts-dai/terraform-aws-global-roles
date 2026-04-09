@@ -204,34 +204,6 @@ resource "aws_iam_role_policy_attachment" "gotthard_readonly_access" {
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
-data "aws_iam_policy_document" "gotthard_secrets_policy" {
-  count = var.gotthard.create ? 1 : 0
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "secretsmanager:GetSecretValue",
-    ]
-    resources = ["*"]
-  }
-}
-
-resource "aws_iam_policy" "gotthard_secrets_policy" {
-  count = var.gotthard.create ? 1 : 0
-
-  name        = "${var.gotthard.nameprefix}gotthard-secrets"
-  description = "Allow the Gotthard AI agent to read secret values from Secrets Manager"
-
-  policy = data.aws_iam_policy_document.gotthard_secrets_policy[0].json
-}
-
-resource "aws_iam_role_policy_attachment" "gotthard_secrets" {
-  count = var.gotthard.create ? 1 : 0
-
-  role       = aws_iam_role.gotthard[0].name
-  policy_arn = aws_iam_policy.gotthard_secrets_policy[0].arn
-}
-
 #
 ## Terraform Execution Role
 data "aws_caller_identity" "current" {
