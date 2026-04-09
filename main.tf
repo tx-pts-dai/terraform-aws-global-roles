@@ -165,6 +165,47 @@ resource "aws_iam_role_policy_attachment" "attach_data_crawler_policy" {
 }
 
 #
+## Gotthard
+data "aws_iam_policy_document" "gotthard_assume_role_policy" {
+  count = var.gotthard.create ? 1 : 0
+
+  dynamic "statement" {
+    for_each = var.gotthard.trusted_role_arns
+
+    content {
+      effect  = "Allow"
+      actions = ["sts:AssumeRole"]
+      principals {
+        type        = "AWS"
+        identifiers = ["arn:aws:iam::${split(":", statement.value)[4]}:root"]
+      }
+      condition {
+        test     = "ArnLike"
+        variable = "aws:PrincipalArn"
+        values   = [statement.value]
+      }
+    }
+  }
+
+}
+
+resource "aws_iam_role" "gotthard" {
+  count = var.gotthard.create ? 1 : 0
+
+  name        = "${var.gotthard.nameprefix}gotthard"
+  description = "Read-only access for the Gotthard AI agent to detect issues within AWS accounts"
+
+  assume_role_policy = data.aws_iam_policy_document.gotthard_assume_role_policy[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "gotthard_readonly_access" {
+  count = var.gotthard.create ? 1 : 0
+
+  role       = aws_iam_role.gotthard[0].name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
+#
 ## Terraform Execution Role
 data "aws_caller_identity" "current" {
   count = var.terraform_execution_role.create ? 1 : 0

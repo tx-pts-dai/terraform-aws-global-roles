@@ -56,6 +56,16 @@ module "global_roles" {
     ]
   }
 
+  # Gotthard Role (disabled by default)
+  gotthard = {
+    create = true
+
+    # Allow the Gotthard AI agent to assume this role
+    trusted_role_arns = [
+      # "arn:aws:iam::123456789012:role/gotthard-ai-agent",
+    ]
+  }
+
   # DAI Lens Data Crawler Role (disabled by default)
   dai_lens_data_crawler = {
     create = true
