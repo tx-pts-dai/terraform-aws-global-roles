@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.4.2...v1.5.0) (2026-04-09)
+
+### Features
+
+* **gotthard:** add Gotthard read-only IAM role ([#15](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/15)) ([8754495](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/8754495846f124b7448ba4497101fc7ce5140e4c))
+
+## [1.4.1](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.4.0...v1.4.1) (2026-04-08)
+
+### Bug Fixes
+
+* use tag:GetResources backup-monitor-crawler policy ([#14](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/14)) ([b387661](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/b3876611183ecc86f254e32d2581a33586f86d9a))
+
 ## [1.3.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.2.0...v1.3.0) (2026-03-18)
 
 ### Features

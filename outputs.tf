@@ -14,6 +14,14 @@ output "dai_data_crawler" {
   } : null
 }
 
+output "gotthard" {
+  description = "Values for the Gotthard IAM role"
+  value = var.gotthard.create ? {
+    role_name = aws_iam_role.gotthard[0].name
+    role_arn  = aws_iam_role.gotthard[0].arn
+  } : null
+}
+
 output "terraform_execution" {
   description = "Values for the Terraform execution IAM role"
   value = var.terraform_execution_role.create ? {
