@@ -186,6 +186,19 @@ data "aws_iam_policy_document" "gotthard_assume_role_policy" {
       }
     }
   }
+
+  dynamic "statement" {
+    for_each = var.gotthard.enable_pod_identity ? [""] : []
+
+    content {
+      effect  = "Allow"
+      actions = ["sts:AssumeRole", "sts:TagSession"]
+      principals {
+        type        = "Service"
+        identifiers = ["pods.eks.amazonaws.com"]
+      }
+    }
+  }
 }
 
 resource "aws_iam_role" "gotthard" {
