@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.5.0...v1.6.0) (2026-04-23)
+
+### Features
+
+* **dai-data-crawler:** add Athena, Glue, and S3 permissions ([#16](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/16)) ([ddf5b64](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/ddf5b64b898edac9544e7bda1f33340562672cdd))
+
 ## [1.5.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.4.2...v1.5.0) (2026-04-09)
 
 ### Features
