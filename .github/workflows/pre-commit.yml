@@ -28,8 +28,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TERRAFORM_DOCS_VERSION: v0.21.0
-  TFLINT_VERSION: v0.60.0
+  TERRAFORM_DOCS_VERSION: v0.22.0
+  TFLINT_VERSION: v0.62.0
 
 jobs:
   collectInputs:
