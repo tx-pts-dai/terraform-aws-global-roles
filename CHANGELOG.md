@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.1](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.6.0...v1.6.1) (2026-04-24)
+
+### Bug Fixes
+
+* add tagsession permissons to the roles to support pod identity ([#17](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/17)) ([4600caf](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/4600caf5d736be3cb66fd4a2a83df5827c08d081))
+
 ## [1.6.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.5.0...v1.6.0) (2026-04-23)
 
 ### Features
