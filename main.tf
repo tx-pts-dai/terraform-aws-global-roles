@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "backup_monitor_crawler_assume_role_policy" {
 
     content {
       effect  = "Allow"
-      actions = ["sts:AssumeRole"]
+      actions = ["sts:AssumeRole", "sts:TagSession"]
       principals {
         type        = "AWS"
         identifiers = [statement.value]
@@ -103,7 +103,7 @@ data "aws_iam_policy_document" "dai_lens_data_crawler_assume_role_policy" {
 
     content {
       effect  = "Allow"
-      actions = ["sts:AssumeRole"]
+      actions = ["sts:AssumeRole", "sts:TagSession"]
       principals {
         type        = "AWS"
         identifiers = [statement.value]
@@ -219,7 +219,7 @@ data "aws_iam_policy_document" "gotthard_assume_role_policy" {
 
     content {
       effect  = "Allow"
-      actions = ["sts:AssumeRole"]
+      actions = ["sts:AssumeRole", "sts:TagSession"]
       principals {
         type        = "AWS"
         identifiers = ["arn:aws:iam::${split(":", statement.value)[4]}:root"]
