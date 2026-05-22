@@ -16,7 +16,6 @@ data "aws_iam_policy_document" "backup_monitor_crawler_assume_role_policy" {
     }
   }
 }
-
 resource "aws_iam_role" "backup_monitor_crawler" {
   count = var.backup_monitor_crawler.create ? 1 : 0
 
@@ -25,7 +24,6 @@ resource "aws_iam_role" "backup_monitor_crawler" {
 
   assume_role_policy = data.aws_iam_policy_document.backup_monitor_crawler_assume_role_policy[0].json
 }
-
 data "aws_iam_policy_document" "backup_monitor_crawler_policy" {
   count = var.backup_monitor_crawler.create ? 1 : 0
 
@@ -63,7 +61,6 @@ data "aws_iam_policy_document" "backup_monitor_crawler_policy" {
     resources = ["*"]
   }
 }
-
 resource "aws_iam_policy" "backup_monitor_crawler_policy" {
   count = var.backup_monitor_crawler.create ? 1 : 0
 
@@ -72,7 +69,6 @@ resource "aws_iam_policy" "backup_monitor_crawler_policy" {
 
   policy = data.aws_iam_policy_document.backup_monitor_crawler_policy[0].json
 }
-
 resource "aws_iam_role_policy_attachment" "attach_backup_monitor_crawler_policy" {
   count = var.backup_monitor_crawler.create ? 1 : 0
 
@@ -148,51 +144,6 @@ data "aws_iam_policy_document" "dai_data_crawler_policy" {
       resources = ["*"]
     }
   }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "athena:ListDataCatalogs",
-      "athena:ListDatabases",
-      "athena:ListTableMetadata",
-      "athena:GetTableMetadata",
-      "athena:ListWorkGroups",
-      "athena:GetWorkGroup",
-      "athena:StartQueryExecution",
-      "athena:StopQueryExecution",
-      "athena:GetQueryExecution",
-      "athena:GetQueryResults",
-      "athena:GetQueryResultsStream",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "glue:GetDatabase",
-      "glue:GetDatabases",
-      "glue:GetTable",
-      "glue:GetTables",
-      "glue:GetPartition",
-      "glue:GetPartitions",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:GetBucketLocation",
-      "s3:GetObject",
-      "s3:ListBucket",
-      "s3:ListBucketMultipartUploads",
-      "s3:ListMultipartUploadParts",
-      "s3:AbortMultipartUpload",
-      "s3:PutObject",
-    ]
-    resources = ["*"]
-  }
 }
 resource "aws_iam_policy" "dai_data_crawler_policy" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
@@ -233,7 +184,6 @@ data "aws_iam_policy_document" "gotthard_assume_role_policy" {
   }
 
 }
-
 resource "aws_iam_role" "gotthard" {
   count = var.gotthard.create ? 1 : 0
 
@@ -242,7 +192,6 @@ resource "aws_iam_role" "gotthard" {
 
   assume_role_policy = data.aws_iam_policy_document.gotthard_assume_role_policy[0].json
 }
-
 resource "aws_iam_role_policy_attachment" "gotthard_readonly_access" {
   count = var.gotthard.create ? 1 : 0
 
@@ -255,7 +204,6 @@ resource "aws_iam_role_policy_attachment" "gotthard_readonly_access" {
 data "aws_caller_identity" "current" {
   count = var.terraform_execution_role.create ? 1 : 0
 }
-
 locals {
   # Build the GitHub Actions OIDC role ARN from the current account
   github_actions_oidc_arn = var.terraform_execution_role.create ? "arn:aws:iam::${data.aws_caller_identity.current[0].account_id}:role/${var.terraform_execution_role.github_actions_oidc_role_name}" : ""
@@ -266,7 +214,6 @@ locals {
     var.terraform_execution_role.external_trusted_arns
   ) : []
 }
-
 data "aws_iam_policy_document" "terraform_execution_assume_role_policy" {
   count = var.terraform_execution_role.create ? 1 : 0
 
@@ -279,7 +226,6 @@ data "aws_iam_policy_document" "terraform_execution_assume_role_policy" {
     }
   }
 }
-
 resource "aws_iam_role" "terraform_execution" {
   count = var.terraform_execution_role.create ? 1 : 0
 
@@ -288,10 +234,129 @@ resource "aws_iam_role" "terraform_execution" {
   assume_role_policy   = data.aws_iam_policy_document.terraform_execution_assume_role_policy[0].json
   permissions_boundary = var.terraform_execution_role.permissions_boundary
 }
-
 resource "aws_iam_role_policy_attachment" "terraform_execution_policies" {
   count = var.terraform_execution_role.create ? length(var.terraform_execution_role.policy_arns) : 0
 
   role       = aws_iam_role.terraform_execution[0].name
   policy_arn = var.terraform_execution_role.policy_arns[count.index]
+}
+
+#
+## Grafana-Athena Logs Analyser
+data "aws_iam_policy_document" "grafana_athena_assume_role_policy" {
+  count = var.grafana_athena_role.create ? 1 : 0
+
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+
+    dynamic "principals" {
+      for_each = length(var.grafana_athena_role.trusted_role_arns) > 0 ? [""] : []
+      content {
+        type        = "AWS"
+        identifiers = var.grafana_athena_role.trusted_role_arns
+      }
+    }
+  }
+}
+
+data "aws_iam_policy_document" "grafana_athena_query_policy" {
+  count = var.grafana_athena_role.create ? 1 : 0
+
+  statement {
+    sid    = "AllowAthenaQueries"
+    effect = "Allow"
+    actions = [
+      "athena:ListDataCatalogs",
+      "athena:ListDatabases",
+      "athena:ListTableMetadata",
+      "athena:GetTableMetadata",
+      "athena:ListWorkGroups",
+      "athena:GetWorkGroup",
+      "athena:StartQueryExecution",
+      "athena:StopQueryExecution",
+      "athena:GetQueryExecution",
+      "athena:GetQueryResults",
+      "athena:GetQueryResultsStream",
+    ]
+    resources = var.grafana_athena_role.athena_resources
+  }
+
+  statement {
+    sid    = "AllowGlueCatalogRead"
+    effect = "Allow"
+    actions = [
+      "glue:GetDatabase",
+      "glue:GetDatabases",
+      "glue:GetTable",
+      "glue:GetTables",
+      "glue:GetPartition",
+      "glue:GetPartitions",
+    ]
+    resources = var.grafana_athena_role.glue_resources
+  }
+
+  dynamic "statement" {
+    for_each = length(var.grafana_athena_role.athena_source_buckets) > 0 ? [""] : []
+
+    content {
+      sid    = "AllowReadAccessToAthenaSourceBuckets"
+      effect = "Allow"
+      actions = [
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket",
+      ]
+      resources = var.grafana_athena_role.athena_source_buckets
+    }
+  }
+
+  dynamic "statement" {
+    for_each = length(var.grafana_athena_role.athena_cache_buckets) > 0 ? [""] : []
+
+    content {
+      sid    = "AllowAccessToAthenaCacheBucket"
+      effect = "Allow"
+      actions = [
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:ListBucketMultipartUploads",
+        "s3:ListMultipartUploadParts",
+        "s3:AbortMultipartUpload",
+        "s3:PutObject",
+      ]
+      resources = var.grafana_athena_role.athena_cache_buckets
+    }
+  }
+}
+
+resource "aws_iam_policy" "grafana_athena_query_policy" {
+  count = var.grafana_athena_role.create ? 1 : 0
+
+  name        = "${var.grafana_athena_role.nameprefix}grafana_athena_query"
+  description = "Policy for Grafana Athena Logs Analyser role, granting permissions to run Athena queries."
+
+  policy = data.aws_iam_policy_document.grafana_athena_query_policy[0].json
+}
+
+resource "aws_iam_role" "grafana_athena" {
+  count = var.grafana_athena_role.create ? 1 : 0
+
+  name        = "${var.grafana_athena_role.nameprefix}grafana_athena"
+  description = "Role for Grafana Athena Logs Analyser"
+
+  assume_role_policy = data.aws_iam_policy_document.grafana_athena_assume_role_policy[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "attach_grafana_athena_policy" {
+  count = var.grafana_athena_role.create ? 1 : 0
+
+  role       = aws_iam_role.grafana_athena[0].name
+  policy_arn = aws_iam_policy.grafana_athena_query_policy[0].arn
 }
