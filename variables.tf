@@ -86,29 +86,29 @@ variable "grafana_athena_role" {
     - create                : Whether to create the IAM role and policies.
     - nameprefix            : Prefix for the IAM role name and policy.
     - trusted_role_arns     : List of ARNs for roles that can assume this role (e.g. the Grafana data source Lambda execution role).
-    - athena_source_buckets : List of S3 bucket ARNs that the crawler can read from (for Athena queries). Remember to include both the bucket ARN and the bucket ARN with /* for objects.
+    - athena_source_s3_resources : List of S3 bucket ARNs that the crawler can read from (for Athena queries). Remember to include both the bucket ARN and the bucket ARN with /* for objects.
     - athena_cache_buckets  : List of S3 bucket ARNs for Athena query results. Remember to include both the bucket ARN and the bucket ARN with /* for objects.
     - athena_resources      : List of ARNs for Athena resources (e.g. workgroups) that the role can access.
     - glue_resources        : List of ARNs for Glue resources (e.g. databases, tables) that the role can access.
   EOT
 
   type = object({
-    create                = optional(bool, false)
-    nameprefix            = optional(string, "")
-    trusted_role_arns     = optional(list(string), [])
-    athena_source_buckets = optional(list(string), [])
-    athena_cache_buckets  = optional(list(string), [])
-    athena_resources      = optional(list(string), ["*"])
-    glue_resources        = optional(list(string), ["*"])
+    create                     = optional(bool, false)
+    nameprefix                 = optional(string, "")
+    trusted_role_arns          = optional(list(string), [])
+    athena_source_s3_resources = optional(list(string), [])
+    athena_cache_buckets       = optional(list(string), [])
+    athena_resources           = optional(list(string), ["*"])
+    glue_resources             = optional(list(string), ["*"])
   })
   default = {}
 
   # if create is true, then resources and buckets must be provided and cannot be empty
   validation {
     condition = !(var.grafana_athena_role.create) || (
-      (length(var.grafana_athena_role.athena_source_buckets) > 0) &&
+      (length(var.grafana_athena_role.athena_source_s3_resources) > 0) &&
       (length(var.grafana_athena_role.athena_cache_buckets) > 0)
     )
-    error_message = "If grafana_athena_role.create is true, then athena_source_buckets and athena_cache_buckets must be provided and cannot be empty."
+    error_message = "If grafana_athena_role.create is true, then athena_source_s3_resources and athena_cache_buckets must be provided and cannot be empty."
   }
 }

@@ -302,7 +302,7 @@ data "aws_iam_policy_document" "grafana_athena_query_policy" {
   }
 
   dynamic "statement" {
-    for_each = length(var.grafana_athena_role.athena_source_buckets) > 0 ? [""] : []
+    for_each = length(var.grafana_athena_role.athena_source_s3_resources) > 0 ? [""] : []
 
     content {
       sid    = "AllowReadAccessToAthenaSourceBuckets"
@@ -312,7 +312,7 @@ data "aws_iam_policy_document" "grafana_athena_query_policy" {
         "s3:GetObject",
         "s3:ListBucket",
       ]
-      resources = var.grafana_athena_role.athena_source_buckets
+      resources = var.grafana_athena_role.athena_source_s3_resources
     }
   }
 
