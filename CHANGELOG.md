@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.6.1...v1.7.0) (2026-05-28)
+
+### Features
+
+* remove athena permissions ([#20](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/20)) ([0411530](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/041153063fc70089a94e1fcadd184bed4523d398))
+
 ## [1.6.1](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.6.0...v1.6.1) (2026-04-24)
 
 ### Bug Fixes

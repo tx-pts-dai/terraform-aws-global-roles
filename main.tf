@@ -119,6 +119,7 @@ data "aws_iam_policy_document" "dai_lens_data_crawler_assume_role_policy" {
     }
   }
 }
+
 resource "aws_iam_role" "dai_data_crawler" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
@@ -156,52 +157,8 @@ data "aws_iam_policy_document" "dai_data_crawler_policy" {
       resources = ["*"]
     }
   }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "athena:ListDataCatalogs",
-      "athena:ListDatabases",
-      "athena:ListTableMetadata",
-      "athena:GetTableMetadata",
-      "athena:ListWorkGroups",
-      "athena:GetWorkGroup",
-      "athena:StartQueryExecution",
-      "athena:StopQueryExecution",
-      "athena:GetQueryExecution",
-      "athena:GetQueryResults",
-      "athena:GetQueryResultsStream",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "glue:GetDatabase",
-      "glue:GetDatabases",
-      "glue:GetTable",
-      "glue:GetTables",
-      "glue:GetPartition",
-      "glue:GetPartitions",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:GetBucketLocation",
-      "s3:GetObject",
-      "s3:ListBucket",
-      "s3:ListBucketMultipartUploads",
-      "s3:ListMultipartUploadParts",
-      "s3:AbortMultipartUpload",
-      "s3:PutObject",
-    ]
-    resources = ["*"]
-  }
 }
+
 resource "aws_iam_policy" "dai_data_crawler_policy" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
@@ -210,6 +167,7 @@ resource "aws_iam_policy" "dai_data_crawler_policy" {
 
   policy = data.aws_iam_policy_document.dai_data_crawler_policy[0].json
 }
+
 resource "aws_iam_role_policy_attachment" "attach_data_crawler_policy" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
@@ -263,7 +221,6 @@ resource "aws_iam_role_policy_attachment" "gotthard_readonly_access" {
 data "aws_caller_identity" "current" {
   count = var.terraform_execution_role.create ? 1 : 0
 }
-
 locals {
   # Build the GitHub Actions OIDC role ARN from the current account
   github_actions_oidc_arn = var.terraform_execution_role.create ? "arn:aws:iam::${data.aws_caller_identity.current[0].account_id}:role/${var.terraform_execution_role.github_actions_oidc_role_name}" : ""
