@@ -16,6 +16,7 @@ data "aws_iam_policy_document" "backup_monitor_crawler_assume_role_policy" {
     }
   }
 }
+
 resource "aws_iam_role" "backup_monitor_crawler" {
   count = var.backup_monitor_crawler.create ? 1 : 0
 
@@ -24,6 +25,7 @@ resource "aws_iam_role" "backup_monitor_crawler" {
 
   assume_role_policy = data.aws_iam_policy_document.backup_monitor_crawler_assume_role_policy[0].json
 }
+
 data "aws_iam_policy_document" "backup_monitor_crawler_policy" {
   count = var.backup_monitor_crawler.create ? 1 : 0
 
@@ -61,6 +63,7 @@ data "aws_iam_policy_document" "backup_monitor_crawler_policy" {
     resources = ["*"]
   }
 }
+
 resource "aws_iam_policy" "backup_monitor_crawler_policy" {
   count = var.backup_monitor_crawler.create ? 1 : 0
 
@@ -69,6 +72,7 @@ resource "aws_iam_policy" "backup_monitor_crawler_policy" {
 
   policy = data.aws_iam_policy_document.backup_monitor_crawler_policy[0].json
 }
+
 resource "aws_iam_role_policy_attachment" "attach_backup_monitor_crawler_policy" {
   count = var.backup_monitor_crawler.create ? 1 : 0
 
@@ -107,6 +111,7 @@ data "aws_iam_policy_document" "dai_lens_data_crawler_assume_role_policy" {
     }
   }
 }
+
 resource "aws_iam_role" "dai_data_crawler" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
@@ -145,6 +150,7 @@ data "aws_iam_policy_document" "dai_data_crawler_policy" {
     }
   }
 }
+
 resource "aws_iam_policy" "dai_data_crawler_policy" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
@@ -153,6 +159,7 @@ resource "aws_iam_policy" "dai_data_crawler_policy" {
 
   policy = data.aws_iam_policy_document.dai_data_crawler_policy[0].json
 }
+
 resource "aws_iam_role_policy_attachment" "attach_data_crawler_policy" {
   count = var.dai_lens_data_crawler.create ? 1 : 0
 
@@ -184,6 +191,7 @@ data "aws_iam_policy_document" "gotthard_assume_role_policy" {
   }
 
 }
+
 resource "aws_iam_role" "gotthard" {
   count = var.gotthard.create ? 1 : 0
 
@@ -192,6 +200,7 @@ resource "aws_iam_role" "gotthard" {
 
   assume_role_policy = data.aws_iam_policy_document.gotthard_assume_role_policy[0].json
 }
+
 resource "aws_iam_role_policy_attachment" "gotthard_readonly_access" {
   count = var.gotthard.create ? 1 : 0
 
@@ -214,6 +223,7 @@ locals {
     var.terraform_execution_role.external_trusted_arns
   ) : []
 }
+
 data "aws_iam_policy_document" "terraform_execution_assume_role_policy" {
   count = var.terraform_execution_role.create ? 1 : 0
 
@@ -226,6 +236,7 @@ data "aws_iam_policy_document" "terraform_execution_assume_role_policy" {
     }
   }
 }
+
 resource "aws_iam_role" "terraform_execution" {
   count = var.terraform_execution_role.create ? 1 : 0
 
@@ -234,6 +245,7 @@ resource "aws_iam_role" "terraform_execution" {
   assume_role_policy   = data.aws_iam_policy_document.terraform_execution_assume_role_policy[0].json
   permissions_boundary = var.terraform_execution_role.permissions_boundary
 }
+
 resource "aws_iam_role_policy_attachment" "terraform_execution_policies" {
   count = var.terraform_execution_role.create ? length(var.terraform_execution_role.policy_arns) : 0
 
