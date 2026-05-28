@@ -68,14 +68,14 @@ as described in the `.pre-commit-config.yaml` file
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0 |
 
 ## Modules
@@ -85,7 +85,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_iam_policy.backup_monitor_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.dai_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.backup_monitor_crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
@@ -107,7 +107,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_backup_monitor_crawler"></a> [backup\_monitor\_crawler](#input\_backup\_monitor\_crawler) | Configuration for the backup monitor crawler IAM role and permissions.<br/><br/>- create            : Whether to create the IAM role and policies.<br/>- nameprefix        : Prefix for the IAM role name and policy.<br/>- trusted\_role\_arns : List of ARNs for roles that can assume this role (e.g. the backup monitor Lambda execution role). | <pre>object({<br/>    create            = optional(bool, false)<br/>    nameprefix        = optional(string, "")<br/>    trusted_role_arns = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 | <a name="input_dai_lens_data_crawler"></a> [dai\_lens\_data\_crawler](#input\_dai\_lens\_data\_crawler) | Configuration for the DAI Lens data crawler IAM role and permissions"<br/><br/>- create                : Whether to create the IAM role and policies.<br/>- nameprefix            : Prefix for the IAM role name and policy.<br/>- disable\_rds\_access    : If true, disables access to RDS resources.<br/>- disable\_health\_access : If true, disables access to AWS Health resources.<br/>- trusted\_role\_arns     : List of ARNs for roles that can assume this role. | <pre>object({<br/>    create                = optional(bool, false)<br/>    nameprefix            = optional(string, "")<br/>    disable_rds_access    = optional(bool, false)<br/>    disable_health_access = optional(bool, false)<br/>    trusted_role_arns     = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 | <a name="input_gotthard"></a> [gotthard](#input\_gotthard) | Configuration for the Gotthard IAM role.<br/>This role grants broad read-only access for the Gotthard AI agent to detect issues<br/>within AWS accounts. Secret values cannot be read as ReadOnlyAccess excludes GetSecretValue.<br/><br/>- create            : Whether to create the IAM role and policies.<br/>- nameprefix        : Prefix for the IAM role name and policy.<br/>- trusted\_role\_arns : List of role ARNs that can assume this role. Each ARN's account is<br/>                      trusted at the root level with an aws:PrincipalArn condition scoped<br/>                      to the exact ARN (e.g. the Gotthard AI agent role). | <pre>object({<br/>    create            = optional(bool, false)<br/>    nameprefix        = optional(string, "")<br/>    trusted_role_arns = optional(list(string), [])<br/>  })</pre> | `{}` | no |
@@ -116,7 +116,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_backup_monitor_crawler"></a> [backup\_monitor\_crawler](#output\_backup\_monitor\_crawler) | Values for the backup monitor crawler IAM role |
 | <a name="output_dai_data_crawler"></a> [dai\_data\_crawler](#output\_dai\_data\_crawler) | values for the DAI Lens data crawler IAM role |
 | <a name="output_gotthard"></a> [gotthard](#output\_gotthard) | Values for the Gotthard IAM role |
