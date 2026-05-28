@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.1](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.7.0...v1.7.1) (2026-05-28)
+
+### Bug Fixes
+
+* **backup_monitor:** allow crawler to get AWS account alias name ([#21](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/21)) ([7a9d60c](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/7a9d60cd48ac3de100ebbeaa05acd63d0c30ca05))
+
 ## [1.7.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.6.1...v1.7.0) (2026-05-28)
 
 ### Features
