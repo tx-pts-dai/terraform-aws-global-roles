@@ -62,6 +62,14 @@ data "aws_iam_policy_document" "backup_monitor_crawler_policy" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:ListAccountAliases",
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "backup_monitor_crawler_policy" {
