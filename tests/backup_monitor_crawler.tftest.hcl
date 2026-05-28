@@ -41,6 +41,11 @@ mock_provider "aws" {
               "Effect": "Allow",
               "Action": ["kms:DescribeKey"],
               "Resource": "*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": ["iam:ListAccountAliases"],
+              "Resource": "*"
             }
           ]
         }
