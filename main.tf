@@ -152,7 +152,8 @@ data "aws_iam_policy_document" "dai_data_crawler_policy" {
       actions = [
         "health:DescribeEvents",
         "health:DescribeEventDetails",
-        "health:DescribeAffectedEntities"
+        "health:DescribeAffectedEntities",
+        "health:DescribeEntityAggregates"
       ]
       resources = ["*"]
     }
