@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.7.1...v1.8.0) (2026-10-21)
+
+### Features
+
+* **health:** allow crawler to describe entity aggregates ([#26](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/26)) ([d46be83](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/d46be83d0f46f2547482e4b0b88bab4bd843a890))
+
 ## [1.7.1](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.7.0...v1.7.1) (2026-05-28)
 
 ### Bug Fixes
