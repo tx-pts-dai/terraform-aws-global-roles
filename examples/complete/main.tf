@@ -56,6 +56,12 @@ module "global_roles" {
     ]
   }
 
+  # AWS DevOps Agent Role (disabled by default)
+  # Trusts the Agent Spaces of the AI Platform and DAI central accounts by default
+  devops_agent = {
+    create = true
+  }
+
   # Gotthard Role (disabled by default)
   gotthard = {
     create = true

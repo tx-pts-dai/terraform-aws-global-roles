@@ -14,6 +14,14 @@ output "dai_data_crawler" {
   } : null
 }
 
+output "devops_agent" {
+  description = "Values for the AWS DevOps Agent IAM role"
+  value = var.devops_agent.create ? {
+    role_name = aws_iam_role.devops_agent[0].name
+    role_arn  = aws_iam_role.devops_agent[0].arn
+  } : null
+}
+
 output "gotthard" {
   description = "Values for the Gotthard IAM role"
   value = var.gotthard.create ? {
