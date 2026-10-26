@@ -36,6 +36,28 @@ variable "dai_lens_data_crawler" {
   default = {}
 }
 
+variable "devops_agent" {
+  description = <<-EOT
+    Configuration for the AWS DevOps Agent IAM role.
+    This role lets AWS DevOps Agent Spaces in the trusted accounts read this account as a
+    secondary (source) account, with the AIDevOpsAgentAccessPolicy managed policy. Each Agent
+    Space still needs a source association in its own account pointing at this role.
+
+    - create              : Whether to create the IAM role and policies.
+    - nameprefix          : Prefix for the IAM role name and policy.
+    - trusted_account_ids : Account IDs whose Agent Spaces may assume this role. Defaults to the
+                            AI Platform accounts (dev 017421875774, prod 464176558764) and the
+                            DAI central accounts (dev 851725213542, prod 730335665754).
+  EOT
+
+  type = object({
+    create              = optional(bool, false)
+    nameprefix          = optional(string, "")
+    trusted_account_ids = optional(list(string), ["017421875774", "464176558764", "851725213542", "730335665754"])
+  })
+  default = {}
+}
+
 variable "gotthard" {
   description = <<-EOT
     Configuration for the Gotthard IAM role.

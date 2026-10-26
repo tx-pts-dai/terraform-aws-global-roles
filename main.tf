@@ -218,6 +218,74 @@ resource "aws_iam_role_policy_attachment" "gotthard_readonly_access" {
 }
 
 #
+## AWS DevOps Agent
+data "aws_iam_policy_document" "devops_agent_assume_role_policy" {
+  count = var.devops_agent.create ? 1 : 0
+
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["aidevops.amazonaws.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = var.devops_agent.trusted_account_ids
+    }
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = [for account_id in var.devops_agent.trusted_account_ids : "arn:aws:aidevops:*:${account_id}:agentspace/*"]
+    }
+  }
+}
+
+resource "aws_iam_role" "devops_agent" {
+  count = var.devops_agent.create ? 1 : 0
+
+  name        = "${var.devops_agent.nameprefix}devops-agent"
+  description = "Lets AWS DevOps Agent Spaces in the trusted accounts investigate this account"
+
+  assume_role_policy = data.aws_iam_policy_document.devops_agent_assume_role_policy[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "devops_agent_access" {
+  count = var.devops_agent.create ? 1 : 0
+
+  role       = aws_iam_role.devops_agent[0].name
+  policy_arn = "arn:aws:iam::aws:policy/AIDevOpsAgentAccessPolicy"
+}
+
+## The agent creates the Resource Explorer service-linked role on first use
+data "aws_iam_policy_document" "devops_agent_policy" {
+  count = var.devops_agent.create ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["iam:CreateServiceLinkedRole"]
+    resources = ["arn:aws:iam::*:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"]
+  }
+}
+
+resource "aws_iam_policy" "devops_agent_policy" {
+  count = var.devops_agent.create ? 1 : 0
+
+  name        = "${var.devops_agent.nameprefix}devops-agent"
+  description = "Lets AWS DevOps Agent create the Resource Explorer service-linked role"
+
+  policy = data.aws_iam_policy_document.devops_agent_policy[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "attach_devops_agent_policy" {
+  count = var.devops_agent.create ? 1 : 0
+
+  role       = aws_iam_role.devops_agent[0].name
+  policy_arn = aws_iam_policy.devops_agent_policy[0].arn
+}
+
+#
 ## Terraform Execution Role
 data "aws_caller_identity" "current" {
   count = var.terraform_execution_role.create ? 1 : 0
