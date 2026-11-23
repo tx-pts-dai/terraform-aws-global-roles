@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.8.0...v1.9.0) (2026-11-23)
+
+### Features
+
+* **aws-mcp:** add aws-mcp-readonly role ([#31](https://github.com/tx-pts-dai/terraform-aws-global-roles/issues/31)) ([9fcf4e4](https://github.com/tx-pts-dai/terraform-aws-global-roles/commit/9fcf4e4f6f71ff25a7413b84548c41742c259d59))
+
 ## [1.8.0](https://github.com/tx-pts-dai/terraform-aws-global-roles/compare/v1.7.1...v1.8.0) (2026-10-21)
 
 ### Features
