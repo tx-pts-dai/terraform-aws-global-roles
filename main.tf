@@ -218,6 +218,46 @@ resource "aws_iam_role_policy_attachment" "gotthard_readonly_access" {
 }
 
 #
+## AWS MCP
+data "aws_iam_policy_document" "aws_mcp_assume_role_policy" {
+  count = var.aws_mcp.create ? 1 : 0
+
+  dynamic "statement" {
+    for_each = var.aws_mcp.trusted_role_arns
+
+    content {
+      effect  = "Allow"
+      actions = ["sts:AssumeRole", "sts:TagSession"]
+      principals {
+        type        = "AWS"
+        identifiers = ["arn:aws:iam::${split(":", statement.value)[4]}:root"]
+      }
+      condition {
+        test     = "ArnLike"
+        variable = "aws:PrincipalArn"
+        values   = [statement.value]
+      }
+    }
+  }
+}
+
+resource "aws_iam_role" "aws_mcp" {
+  count = var.aws_mcp.create ? 1 : 0
+
+  name        = "${var.aws_mcp.nameprefix}aws-mcp-readonly"
+  description = "Read-only access for the AI Platform AWS MCP server"
+
+  assume_role_policy = data.aws_iam_policy_document.aws_mcp_assume_role_policy[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "aws_mcp_readonly_access" {
+  count = var.aws_mcp.create ? 1 : 0
+
+  role       = aws_iam_role.aws_mcp[0].name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
+#
 ## Terraform Execution Role
 data "aws_caller_identity" "current" {
   count = var.terraform_execution_role.create ? 1 : 0

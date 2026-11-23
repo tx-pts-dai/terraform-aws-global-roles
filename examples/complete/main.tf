@@ -66,6 +66,16 @@ module "global_roles" {
     ]
   }
 
+  # AWS MCP Role (disabled by default)
+  aws_mcp = {
+    create = true
+
+    # Allow the AI Platform AWS MCP server to assume this role
+    trusted_role_arns = [
+      # "arn:aws:iam::123456789012:role/ai-platform-prod-mcp-aws",
+    ]
+  }
+
   # DAI Lens Data Crawler Role (disabled by default)
   dai_lens_data_crawler = {
     create = true

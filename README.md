@@ -88,15 +88,18 @@ No modules.
 | ---- | ---- |
 | [aws_iam_policy.backup_monitor_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.dai_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_role.aws_mcp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.backup_monitor_crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.dai_data_crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.gotthard](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.terraform_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.attach_backup_monitor_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.attach_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.aws_mcp_readonly_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.gotthard_readonly_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.terraform_execution_policies](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.aws_mcp_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.backup_monitor_crawler_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.backup_monitor_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.dai_data_crawler_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -108,6 +111,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_aws_mcp"></a> [aws\_mcp](#input\_aws\_mcp) | Configuration for the AWS MCP IAM role (aws-mcp-readonly).<br/>This role grants broad read-only access for the AI Platform AWS MCP server.<br/>Secret values cannot be read as ReadOnlyAccess excludes GetSecretValue.<br/><br/>- create            : Whether to create the IAM role and policies.<br/>- nameprefix        : Prefix for the IAM role name.<br/>- trusted\_role\_arns : List of role ARNs that can assume this role. Each ARN's account is<br/>                      trusted at the root level with an aws:PrincipalArn condition scoped<br/>                      to the exact ARN (e.g. the AI Platform MCP server role). | <pre>object({<br/>    create            = optional(bool, false)<br/>    nameprefix        = optional(string, "")<br/>    trusted_role_arns = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 | <a name="input_backup_monitor_crawler"></a> [backup\_monitor\_crawler](#input\_backup\_monitor\_crawler) | Configuration for the backup monitor crawler IAM role and permissions.<br/><br/>- create            : Whether to create the IAM role and policies.<br/>- nameprefix        : Prefix for the IAM role name and policy.<br/>- trusted\_role\_arns : List of ARNs for roles that can assume this role (e.g. the backup monitor Lambda execution role). | <pre>object({<br/>    create            = optional(bool, false)<br/>    nameprefix        = optional(string, "")<br/>    trusted_role_arns = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 | <a name="input_dai_lens_data_crawler"></a> [dai\_lens\_data\_crawler](#input\_dai\_lens\_data\_crawler) | Configuration for the DAI Lens data crawler IAM role and permissions"<br/><br/>- create                : Whether to create the IAM role and policies.<br/>- nameprefix            : Prefix for the IAM role name and policy.<br/>- disable\_rds\_access    : If true, disables access to RDS resources.<br/>- disable\_health\_access : If true, disables access to AWS Health resources.<br/>- trusted\_role\_arns     : List of ARNs for roles that can assume this role. | <pre>object({<br/>    create                = optional(bool, false)<br/>    nameprefix            = optional(string, "")<br/>    disable_rds_access    = optional(bool, false)<br/>    disable_health_access = optional(bool, false)<br/>    trusted_role_arns     = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 | <a name="input_gotthard"></a> [gotthard](#input\_gotthard) | Configuration for the Gotthard IAM role.<br/>This role grants broad read-only access for the Gotthard AI agent to detect issues<br/>within AWS accounts. Secret values cannot be read as ReadOnlyAccess excludes GetSecretValue.<br/><br/>- create            : Whether to create the IAM role and policies.<br/>- nameprefix        : Prefix for the IAM role name and policy.<br/>- trusted\_role\_arns : List of role ARNs that can assume this role. Each ARN's account is<br/>                      trusted at the root level with an aws:PrincipalArn condition scoped<br/>                      to the exact ARN (e.g. the Gotthard AI agent role). | <pre>object({<br/>    create            = optional(bool, false)<br/>    nameprefix        = optional(string, "")<br/>    trusted_role_arns = optional(list(string), [])<br/>  })</pre> | `{}` | no |
@@ -117,6 +121,7 @@ No modules.
 
 | Name | Description |
 | ---- | ----------- |
+| <a name="output_aws_mcp"></a> [aws\_mcp](#output\_aws\_mcp) | Values for the AWS MCP IAM role |
 | <a name="output_backup_monitor_crawler"></a> [backup\_monitor\_crawler](#output\_backup\_monitor\_crawler) | Values for the backup monitor crawler IAM role |
 | <a name="output_dai_data_crawler"></a> [dai\_data\_crawler](#output\_dai\_data\_crawler) | values for the DAI Lens data crawler IAM role |
 | <a name="output_gotthard"></a> [gotthard](#output\_gotthard) | Values for the Gotthard IAM role |
