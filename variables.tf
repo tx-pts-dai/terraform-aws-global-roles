@@ -57,6 +57,27 @@ variable "gotthard" {
   default = {}
 }
 
+variable "aws_mcp" {
+  description = <<-EOT
+    Configuration for the AWS MCP IAM role (aws-mcp-readonly).
+    This role grants broad read-only access for the AI Platform AWS MCP server.
+    Secret values cannot be read as ReadOnlyAccess excludes GetSecretValue.
+
+    - create            : Whether to create the IAM role and policies.
+    - nameprefix        : Prefix for the IAM role name.
+    - trusted_role_arns : List of role ARNs that can assume this role. Each ARN's account is
+                          trusted at the root level with an aws:PrincipalArn condition scoped
+                          to the exact ARN (e.g. the AI Platform MCP server role).
+  EOT
+
+  type = object({
+    create            = optional(bool, false)
+    nameprefix        = optional(string, "")
+    trusted_role_arns = optional(list(string), [])
+  })
+  default = {}
+}
+
 variable "terraform_execution_role" {
   description = <<-EOT
     Configuration for the Terraform execution IAM role. This role is assumed by

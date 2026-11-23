@@ -22,6 +22,14 @@ output "gotthard" {
   } : null
 }
 
+output "aws_mcp" {
+  description = "Values for the AWS MCP IAM role"
+  value = var.aws_mcp.create ? {
+    role_name = aws_iam_role.aws_mcp[0].name
+    role_arn  = aws_iam_role.aws_mcp[0].arn
+  } : null
+}
+
 output "terraform_execution" {
   description = "Values for the Terraform execution IAM role"
   value = var.terraform_execution_role.create ? {
