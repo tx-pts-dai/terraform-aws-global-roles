@@ -1,3 +1,11 @@
+output "aws_mcp" {
+  description = "Values for the AWS MCP IAM role"
+  value = var.aws_mcp.create ? {
+    role_name = aws_iam_role.aws_mcp[0].name
+    role_arn  = aws_iam_role.aws_mcp[0].arn
+  } : null
+}
+
 output "backup_monitor_crawler" {
   description = "Values for the backup monitor crawler IAM role"
   value = var.backup_monitor_crawler.create ? {

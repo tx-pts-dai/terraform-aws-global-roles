@@ -177,6 +177,46 @@ resource "aws_iam_role_policy_attachment" "attach_data_crawler_policy" {
 }
 
 #
+## AWS MCP
+data "aws_iam_policy_document" "aws_mcp_assume_role_policy" {
+  count = var.aws_mcp.create ? 1 : 0
+
+  dynamic "statement" {
+    for_each = var.aws_mcp.trusted_role_arns
+
+    content {
+      effect  = "Allow"
+      actions = ["sts:AssumeRole", "sts:TagSession"]
+      principals {
+        type        = "AWS"
+        identifiers = ["arn:aws:iam::${split(":", statement.value)[4]}:root"]
+      }
+      condition {
+        test     = "ArnLike"
+        variable = "aws:PrincipalArn"
+        values   = [statement.value]
+      }
+    }
+  }
+}
+
+resource "aws_iam_role" "aws_mcp" {
+  count = var.aws_mcp.create ? 1 : 0
+
+  name        = "aws-mcp-readonly"
+  description = "Read-only access for the AWS MCP server"
+
+  assume_role_policy = data.aws_iam_policy_document.aws_mcp_assume_role_policy[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "aws_mcp_readonly_access" {
+  count = var.aws_mcp.create ? 1 : 0
+
+  role       = aws_iam_role.aws_mcp[0].name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
+#
 ## Gotthard
 data "aws_iam_policy_document" "gotthard_assume_role_policy" {
   count = var.gotthard.create ? 1 : 0

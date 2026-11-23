@@ -56,6 +56,16 @@ module "global_roles" {
     ]
   }
 
+  # AWS MCP Role (disabled by default)
+  aws_mcp = {
+    create = true
+
+    # Allow the AWS MCP server's execution role to assume this role
+    trusted_role_arns = [
+      # "arn:aws:iam::123456789012:role/aws-mcp-server",
+    ]
+  }
+
   # Gotthard Role (disabled by default)
   gotthard = {
     create = true

@@ -1,3 +1,8 @@
+output "aws_mcp_role" {
+  description = "AWS MCP role details"
+  value       = module.global_roles.aws_mcp
+}
+
 output "terraform_execution_role" {
   description = "Terraform execution role details"
   value       = module.global_roles.terraform_execution

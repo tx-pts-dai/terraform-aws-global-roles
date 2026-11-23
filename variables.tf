@@ -1,3 +1,22 @@
+variable "aws_mcp" {
+  description = <<-EOT
+    Configuration for the AWS MCP IAM role, aws-mcp-readonly.
+    Read-only access for an AWS MCP server that assumes a role of this name in every account
+    it reaches. Secret values cannot be read as ReadOnlyAccess excludes GetSecretValue.
+
+    - create            : Whether to create the IAM role and policies.
+    - trusted_role_arns : List of role ARNs that can assume this role. Each ARN's account is
+                          trusted at the root level with an aws:PrincipalArn condition scoped
+                          to the exact ARN (e.g. the MCP server's execution role).
+  EOT
+
+  type = object({
+    create            = optional(bool, false)
+    trusted_role_arns = optional(list(string), [])
+  })
+  default = {}
+}
+
 variable "backup_monitor_crawler" {
   description = <<-EOT
     Configuration for the backup monitor crawler IAM role and permissions.
